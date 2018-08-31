@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:order-fulfillment-api="http://www.mulesoft.org/schema/mule/order-fulfillment-api" xmlns:customer360api="http://www.mulesoft.org/schema/mule/customer360api" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:order-apispec="http://www.mulesoft.org/schema/mule/order-apispec" xmlns:product-api="http://www.mulesoft.org/schema/mule/product-api" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/order-apispec http://www.mulesoft.org/schema/mule/order-apispec/current/mule-order-apispec.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/product-api http://www.mulesoft.org/schema/mule/product-api/current/mule-product-api.xsd
+http://www.mulesoft.org/schema/mule/customer360api http://www.mulesoft.org/schema/mule/customer360api/current/mule-customer360api.xsd
+http://www.mulesoft.org/schema/mule/order-fulfillment-api http://www.mulesoft.org/schema/mule/order-fulfillment-api/current/mule-order-fulfillment-api.xsd">
+    <http:listener-config name="mobile-customer-api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="mobile-customer-api-config" raml="mobile-customer-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <configuration-properties doc:name="Configuration properties" doc:id="ffb8d47f-0a67-4e06-b81a-b48eaac40b0a" file="mule-app.properties" />
+    <product-api:config name="Product_API_Config" doc:name="Product API Config" doc:id="1944d434-b568-46a6-8c76-e92b8f65fc6c" property_host="${product.dapi.url}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}" property_port="${product.dapi.port}" property_basePath="${product.dapi.basePath}" property_protocol="${product.dapi.protocol}" />
+    <customer360api:config name="Customer_360_API_Config" doc:name="Customer 360 API Config" doc:id="3e7e559f-13e7-4211-b6dc-1a067010873c" property_host="${customer360.papi.url}" property_port="${customer360.papi.port}" property_basePath="${customer360.papi.basePath}" property_protocol="${customer360.papi.protocol}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}"/>
+	<order-fulfillment-api:config name="Order_Fulfillment_API_Config" doc:name="Order Fulfillment API Config" doc:id="3efe8278-13fa-49c9-bfb6-c2ada378378f" property_host="${orderfulfillment.papi.url}" property_port="${orderfulfillment.papi.port}" property_basePath="${orderfulfillment.papi.basePath}" property_protocol="${orderfulfillment.papi.protocol}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}"/>
+	<flow name="mobile-customer-api-main">
+        <http:listener config-ref="mobile-customer-api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="mobile-customer-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="mobile-customer-api-console">
+        <http:listener config-ref="mobile-customer-api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="mobile-customer-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="get:\orders\order\(order_id):mobile-customer-api-config">
+        <customer360api:get-order-by-id doc:name="Get order by id" doc:id="5f60dbbc-2519-4ca5-b1bc-a1c17f2e8df9" id="#[attributes.uriParams.order_id]" config-ref="Customer_360_API_Config"/>
+		<set-variable value="#[[]]" doc:name="Set Variable" doc:id="9fde8233-f891-48ed-8404-d27f45a45481" variableName="items" />
+        <foreach doc:name="For Each" doc:id="9521d9f0-1a14-4e8d-b844-d5fee07044a7" collection="#[payload.orderItems]">
+            <product-api:get doc:name="Get" doc:id="7a97c37d-eb9c-454a-8f81-3679c8314f3a" target="currentProduct" config-ref="Product_API_Config" id="#[payload.product.id]"/>
+            <ee:transform doc:name="Transform Message" doc:id="40910172-e733-4fef-a6f3-d4ed59216bd6">
+                <ee:message />
+                <ee:variables>
+                    <ee:set-variable variableName="items"><![CDATA[%dw 2.0
+output application/java
+---
+vars.items ++
+[
+	{
+		product: {
+			full_description: vars.currentProduct.description,
+			name: vars.currentProduct.name,
+			id: vars.currentProduct.id,
+			pictures: vars.currentProduct.characteristics.images map ($.href),
+			unit_original_price: vars.currentProduct.pricing.listPrice
+		},
+		quantity: payload.quantity.ordered,
+		rel_product: null,
+		product_id: vars.currentProduct.id
+	}
+]]]></ee:set-variable>
+                </ee:variables>
+            </ee:transform>
+        </foreach>
+        <ee:transform doc:name="Transform Message" doc:id="c8c5de7b-9a51-4544-9dc7-d40d71798535">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	cost: {
+		final_price: payload.totalAmount default 0,
+		price: payload.subTotal default 0,
+		tax: payload.taxAmount default 0
+	},
+	shipping: {
+		shipping_address_id: payload.deliveryAddress.addressId default "",
+		rel_address: (payload.deliveryAddress.addressLines as Array joinBy " ") + ', ' + payload.deliveryAddress.city + ', ' + payload.deliveryAddress.postalCode + ', ' + payload.deliveryAddress.state + ', ' + payload.deliveryAddress.country
+	},
+	creation_date: payload.orderDateTime default "",
+	order_id: payload.orderId,
+	tracking_code: payload.trackingNumber default "",
+	items: vars.items
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\products\product\(product_id):mobile-customer-api-config">
+        <product-api:get doc:name="Get" doc:id="9ea7e802-8db0-4035-92af-9db1532a96c8" config-ref="Product_API_Config" target="currentProduct" id="#[attributes.uriParams.product_id]" />
+        <ee:transform doc:name="Transform Message" doc:id="caea28ec-10aa-4060-9df3-6e2c73864fd8">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+	id: vars.currentProduct.id as Number,
+	name: vars.currentProduct.name,
+	full_description: vars.currentProduct.description,
+	pictures: vars.currentProduct.characteristics.images map ($.href),
+	unit_original_price: vars.currentProduct.pricing.listPrice
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\products\search:mobile-customer-api-config">
+        <product-api:get-products doc:name="Get products" doc:id="c86d0af8-d14c-4eb5-8faa-61ba26833c83" config-ref="Product_API_Config" product-name="#[attributes.queryParams.name]"/>
+        <ee:transform doc:name="Transform Message" doc:id="202f69ce-7f43-4488-9901-53555eaacbb2">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\orders\search:mobile-customer-api-config">
+        <customer360api:get-orders doc:name="Get orders" doc:id="605041af-2f18-4218-8db3-726355617c12" customer-id="#[attributes.queryParams.user_id]" config-ref="Customer_360_API_Config"/>
+		<set-variable value="#[[]]" doc:name="Set Variable" doc:id="407b1ae6-a471-43bc-b36d-74dda1707a60" variableName="items" />
+		<foreach doc:name="For Each" doc:id="63627020-babe-4bb6-a5cb-af9fc36eeb8e" collection="#[payload.orderItems]" >
+			<product-api:get doc:name="Get" doc:id="49a40da7-7e2f-46a9-855c-625e18243374" config-ref="Product_API_Config" id="#[payload.product.id]" target="currentProduct" />
+			<ee:transform doc:name="Transform Message" doc:id="b75b2191-6153-41e5-8163-4d43665c84e8" >
+				<ee:message />
+				<ee:variables >
+					<ee:set-variable variableName="items" ><![CDATA[%dw 2.0
+output application/java
+---
+vars.items ++
+[
+	{
+		product: {
+			full_description: vars.currentProduct.description,
+			name: vars.currentProduct.name,
+			id: vars.currentProduct.id,
+			pictures: vars.currentProduct.characteristics.images map ($.href),
+			unit_original_price: vars.currentProduct.pricing.listPrice
+		},
+		quantity: payload.quantity.ordered,
+		rel_product: null,
+		product_id: vars.currentProduct.id
+	}
+]]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</foreach>
+		<ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="890cb8c8-4f53-4076-a1b2-26129e034e9f">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload.orders map ({
+	cost: {
+		final_price: payload.totalAmount default 0,
+		price: payload.subTotal default 0,
+		tax: payload.taxAmount default 0
+	},
+	shipping: {
+		shipping_address_id: payload.deliveryAddress.addressId default "",
+		rel_address: (payload.deliveryAddress.addressLines as Array joinBy " ") + ', ' + payload.deliveryAddress.city + ', ' + payload.deliveryAddress.postalCode + ', ' + payload.deliveryAddress.state + ', ' + payload.deliveryAddress.country
+	},
+	creation_date: payload.orderDateTime default "",
+	order_id: payload.orderId,
+	tracking_code: payload.trackingNumber default "",
+	items: vars.items
+})]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="put:\user\(userId):application\json:mobile-customer-api-config">
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="e9e293af-182e-4355-8108-ebd196c9b6d9">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  code: "500",
+  message: "Method not implemented yet"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+		<set-variable value="#[500]" doc:name="Set Variable" doc:id="96f3cfa8-cc4c-46b9-940e-078a9b5aa575" variableName="httpStatus"/>
+    </flow>
+    <flow name="get:\user\(userId):mobile-customer-api-config">
+        <customer360api:get-customer-by-id doc:name="Get customer by id" doc:id="158de95b-485a-4310-b348-e5976d96eec0" config-ref="Customer_360_API_Config" id="#[attributes.uriParams.userId]"/>
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="510bf9a2-7074-4637-99f6-fbf3d4959558">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	id: payload.id,
+	username: payload.email[0].address,
+	email: payload.email[0].address,
+	firstname: (payload.name splitBy " ")[0],
+	lastname: (payload.name splitBy " ")[1],
+	password: "123456",
+	last_login: now() - |P1M|,
+	mobile_number: payload.phone[0].phoneNumber
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\session:application\json:mobile-customer-api-config">
+		<logger level="WARN" doc:name="Logger" doc:id="4943c5d2-603e-47c9-b26b-b7e5469c8724" message="#['Method not fully implemented yet']"/>
+		<ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="e396d24c-3b24-457b-ac1b-ac0a9433cfaa">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	id: "1",
+	username: payload.username,
+	email: payload.username as String ++ "@mulesoft.com",
+	firstname: "John",
+	lastname: "Doe",
+	password: payload.password,
+	mobile_number: "1256650432"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\user:application\json:mobile-customer-api-config">
+        <ee:transform doc:name="Transform Message" doc:id="421ff579-c16b-42c9-af42-32ef2640c27d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[{
+	phone: [{
+		phoneNumber: payload.mobile_number,
+		doNotCall: false,
+		"type": 'Personal',
+		doNotText: false,
+		preferred: true
+	}],
+	name: payload.firstname ++ payload.lastname,
+	email: [{
+		address: payload.email,
+		doNotEmail: false,
+		"type": 'Personal',
+		preferred: true
+	}]
+}]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<customer360api:post-customers doc:name="Post customers" doc:id="abf7678a-9a86-4f70-8c24-bf16fc3cacaa" config-ref="Customer_360_API_Config"/>
+		<ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="ec50ddf9-5443-4a20-b2e9-81f8430fc4c3">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: "12",
+  username: "matias.suarez",
+  email: "matias.suarez@mulesoft.com",
+  firstname: "matias",
+  lastname: "suarez",
+  password: "123456",
+  mobile_number: "1256650432"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>

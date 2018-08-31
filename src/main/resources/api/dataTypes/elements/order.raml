@@ -1,0 +1,58 @@
+#%RAML 1.0 Library
+uses:
+  Product: product.raml
+
+types:
+  cost: 
+    properties:
+      price: number
+      tax: number
+      final_price: number 
+
+  orderItem:
+    properties:
+      product_id: string
+      rel_product?: string
+      quantity: number
+      product?: Product.product
+
+  shoppingCart:
+    properties:
+      last_modification_date: string
+      cost: cost
+      items: orderItem[]
+
+  shippingAddress:
+    properties:
+      shipping_address_id: string
+      rel_address: string
+  
+  paymentCard:
+    properties:
+      credit_card_id: string
+      rel_card: string
+        
+  orderConfirmationRequest:
+    properties:
+      shipping: shippingAddress
+      payment: paymentCard
+      items: orderItem[]
+  
+  orderConfirmation:
+    properties:
+      order_id: string
+      order_number: string
+      tracking_code: string
+      eta: string
+      shipping: shippingAddress
+      items: orderItem[]
+
+  order:
+    properties:
+      order_id?: string
+      tracking_code: string
+      rel_self: string
+      creation_date: string
+      cost: cost
+      shipping: shippingAddress
+      items: orderItem[]

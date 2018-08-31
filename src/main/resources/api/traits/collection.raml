@@ -1,0 +1,15 @@
+#%RAML 1.0 Trait
+# this is a RAML 1.0 trait fragment indicated by its first line
+queryParameters:
+  maxResults:
+    description: The maximum number of entries to return. This is optional.
+    type: integer
+    required: true
+    default: 25
+    example: 25
+  offset:
+    description: The 1-based index of the first result to be retrieved (for paging).
+    type: integer
+    required: true
+    default: 0
+    example: 0
