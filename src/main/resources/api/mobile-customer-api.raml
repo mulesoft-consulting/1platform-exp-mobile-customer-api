@@ -28,9 +28,9 @@ traits:
   
 /products:
   /search:
+    is: [headers, collection, client-id-required]
     description: Search resource supporting extend product list searches
     get:
-      is: [headers, collection]
       queryParameters:
         name:
           description: use to query products by name
@@ -44,6 +44,7 @@ traits:
               type: product[]
               example: !include examples/product-collection.raml
   /product/{product_id}:
+    is: [headers, client-id-required]
     description: Get product instance details
     get:
       responses:
@@ -53,6 +54,7 @@ traits:
               example: !include examples/product-single.raml
 
 /orders:
+  is: [headers, client-id-required]
   /search:
     get:
       queryParameters:
@@ -67,14 +69,10 @@ traits:
               type: order[]
               example: !include examples/order-collection.raml
   /order/{order_id}:
+    is: [headers, client-id-required]
     description: Order instance resource allowing to update orders
     get:
       description:  Retrieve order details
-      queryParameters:
-        user_id:
-          description: use to query all orders of a user
-          required: true
-          example: 1964401a-a8b3-40c1-b86e-d8b9f75b5842
       responses:
         200:
           body:
@@ -83,7 +81,7 @@ traits:
               example: !include examples/order-single.raml
 
 /user:
-  is: [ headers ]
+  is: [headers, client-id-required]
   post:
     description: The user registration
     body:
@@ -137,8 +135,40 @@ traits:
             application/json:
               type: error
               example: !include examples/error-single.raml
+
+    /shopping_cart:
+      get: 
+        responses:
+          200:
+            body:
+              application/json:
+                type: shoppingCart
+                example: !include examples/shoppingcart-single.raml
+                
+      put:
+        body:
+          application/json:
+            type: shoppingCart
+            
+            example: !include examples/shoppingcart-single-update.raml
+        responses:
+          204:
+      /confirmation:
+        description: confirm the current shopping cart - that will create an order in the backend and provide the link to the order resource
+        post:
+          body:
+            application/json:
+              type: orderConfirmationRequest
+              example: !include examples/order-confirmation-request-single.raml
+          responses:
+            201:
+              body:
+                application/json:
+                  type: orderConfirmation
+                  example: !include examples/order-confirmation-single.raml
+                  displayName: experienceAPIExample
 /session:
-  is: [ headers ]
+  is: [headers, client-id-required]
   post:
     description: Creates a new sessions for the User to login
     body:
