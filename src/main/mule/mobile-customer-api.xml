@@ -11,7 +11,7 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
         </http:listener-connection>
     </http:listener-config>
     <apikit:config name="mobile-customer-api-config" raml="mobile-customer-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-    <configuration-properties doc:name="Configuration properties" doc:id="ffb8d47f-0a67-4e06-b81a-b48eaac40b0a" file="mule-app.properties" />
+    <configuration-properties doc:name="Configuration properties" doc:id="ffb8d47f-0a67-4e06-b81a-b48eaac40b0a" file="mule-properties.yaml" />
     <product-api:config name="Product_API_Config" doc:name="Product API Config" doc:id="1944d434-b568-46a6-8c76-e92b8f65fc6c" property_host="${product.dapi.url}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}" property_port="${product.dapi.port}" property_basePath="${product.dapi.basePath}" property_protocol="${product.dapi.protocol}" />
     <customer360api:config name="Customer_360_API_Config" doc:name="Customer 360 API Config" doc:id="3e7e559f-13e7-4211-b6dc-1a067010873c" property_host="${customer360.papi.url}" property_port="${customer360.papi.port}" property_basePath="${customer360.papi.basePath}" property_protocol="${customer360.papi.protocol}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}" />
     <order-fulfillment-api:config name="Order_Fulfillment_API_Config" doc:name="Order Fulfillment API Config" doc:id="3efe8278-13fa-49c9-bfb6-c2ada378378f" property_host="${orderfulfillment.papi.url}" property_port="${orderfulfillment.papi.port}" property_basePath="${orderfulfillment.papi.basePath}" property_protocol="${orderfulfillment.papi.protocol}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}" />
@@ -439,8 +439,8 @@ var orderPrice = lookup('calculate_price',((payload.items default []) map (item,
 	last_modifiacation_date: now(),
 	cost: {
 		price: orderPrice,
-		tax: orderPrice * p('tax_value'),
-		final_price: orderPrice * p('tax_value') + orderPrice
+		tax: orderPrice * p('tax_value') as Number,
+		final_price: orderPrice * p('tax_value')  as Number + orderPrice
 	},
 	items: payload.items map (item , indexOfItem) -> {
 		product_id: item.product_id,

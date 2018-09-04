@@ -1,0 +1,46 @@
+# Anypoint Platform
+anypoint:
+  platform:
+    analytics_base_uri: "https://analytics-ingest.anypoint.mulesoft.com/"
+    client_id: "c7ee6e3c19f4407b964a5bd95f8e846e"
+    client_secret: "0874121A1d584e419e86F1360333Ca55"
+    base_uri: "https://anypoint.mulesoft.com/"
+    visualizer:
+      layer: "Experience"
+      
+autodiscovery:
+  api:
+    id: "15525860"
+
+# Keystore
+keystore:
+  password: "Mule1379?"
+
+# Consuming APIs
+product:
+  dapi:
+    url: "nto-product-api.us-e2.cloudhub.io"
+    port: "443"
+    protocol: "HTTPS"
+    basePath: "/api"
+orderfulfillment:
+  papi:
+    url: "mocksvc.mulesoft.com"
+    port: "443"
+    protocol: "HTTPS"
+    basePath: "/mocks/a3856aec-6fda-42f7-be9e-29e2eb305832/api/v1"
+customer360:
+  papi:
+    url: "mocksvc.mulesoft.com"
+    port: "443"
+    protocol: "HTTPS"
+    basePath: "/mocks/41b3f3d0-9c47-4fa8-8179-130909b82b7b/v1"
+
+# AP Client App Credentials
+client:
+  app:
+    client_id: "e430fcbe5b8c4cbbb801228c8becf522"
+    client_secret: "3fa78dC0adec456C831245bD90CA2835"
+
+# Business Properties
+tax_value: "0.1"
