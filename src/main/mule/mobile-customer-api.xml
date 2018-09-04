@@ -203,7 +203,9 @@ output application/json
 	name: vars.currentProduct.name,
 	full_description: vars.currentProduct.description,
 	pictures: vars.currentProduct.characteristics.images map ($.href),
-	unit_original_price: vars.currentProduct.pricing.listPrice
+	unit_original_price: vars.currentProduct.pricing.listPrice,
+	unit_price: vars.currentProduct.pricing.listPrice,
+	available_stock: 10
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
@@ -220,8 +222,10 @@ payload.products map (
 		id: $.id,
 		name: $.name,
 		full_description: $.description,
-		unit_original_price: $.pricing.listPrice,
-		pictures: $.characteristics.images map ($.href)
+		unit_price: $.pricing.listPrice,
+		unit_original_price: $.pricing.costOfGoodSold,
+		pictures: $.characteristics.images map ($.href),
+		available_stock: 10
 	}
 )]]></ee:set-payload>
             </ee:message>
