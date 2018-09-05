@@ -203,7 +203,7 @@ output application/json
 	name: vars.currentProduct.name,
 	full_description: vars.currentProduct.description,
 	pictures: vars.currentProduct.characteristics.images map ($.href),
-	unit_original_price: vars.currentProduct.pricing.listPrice,
+	unit_original_price: vars.currentProduct.pricing.costOfGoodsSold default 0,
 	unit_price: vars.currentProduct.pricing.listPrice,
 	available_stock: 10
 }]]></ee:set-payload>
@@ -223,7 +223,7 @@ payload.products map (
 		name: $.name,
 		full_description: $.description,
 		unit_price: $.pricing.listPrice,
-		unit_original_price: $.pricing.costOfGoodSold,
+		unit_original_price: $.pricing.costOfGoodsSold,
 		pictures: $.characteristics.images map ($.href),
 		available_stock: 10
 	}
