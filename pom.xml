@@ -79,6 +79,12 @@
             <version>1.2.2</version>
             <classifier>mule-plugin</classifier>
         </dependency>
+    	<dependency>
+            <groupId>66234019-5a31-4239-ba28-4e6d70f0468a</groupId>
+            <artifactId>customer-api</artifactId>
+            <version>1.0.1</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
     </dependencies>
 
 	<repositories>

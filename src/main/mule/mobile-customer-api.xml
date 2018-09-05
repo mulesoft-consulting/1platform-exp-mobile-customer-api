@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
-	xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:customer360api="http://www.mulesoft.org/schema/mule/customer360api" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:order-apispec="http://www.mulesoft.org/schema/mule/order-apispec" xmlns:order-fulfillment-api="http://www.mulesoft.org/schema/mule/order-fulfillment-api" xmlns:product-api="http://www.mulesoft.org/schema/mule/product-api" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/order-apispec http://www.mulesoft.org/schema/mule/order-apispec/current/mule-order-apispec.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/product-api http://www.mulesoft.org/schema/mule/product-api/current/mule-product-api.xsd http://www.mulesoft.org/schema/mule/customer360api http://www.mulesoft.org/schema/mule/customer360api/current/mule-customer360api.xsd http://www.mulesoft.org/schema/mule/order-fulfillment-api http://www.mulesoft.org/schema/mule/order-fulfillment-api/current/mule-order-fulfillment-api.xsd http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+<mule xmlns:customer-apispec="http://www.mulesoft.org/schema/mule/customer-apispec"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:customer360api="http://www.mulesoft.org/schema/mule/customer360api" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:order-apispec="http://www.mulesoft.org/schema/mule/order-apispec" xmlns:order-fulfillment-api="http://www.mulesoft.org/schema/mule/order-fulfillment-api" xmlns:product-api="http://www.mulesoft.org/schema/mule/product-api" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/order-apispec http://www.mulesoft.org/schema/mule/order-apispec/current/mule-order-apispec.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/product-api http://www.mulesoft.org/schema/mule/product-api/current/mule-product-api.xsd http://www.mulesoft.org/schema/mule/customer360api http://www.mulesoft.org/schema/mule/customer360api/current/mule-customer360api.xsd http://www.mulesoft.org/schema/mule/order-fulfillment-api http://www.mulesoft.org/schema/mule/order-fulfillment-api/current/mule-order-fulfillment-api.xsd http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
-http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
+http://www.mulesoft.org/schema/mule/customer-apispec http://www.mulesoft.org/schema/mule/customer-apispec/current/mule-customer-apispec.xsd">
     <http:listener-config name="mobile-customer-api-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8082" protocol="HTTPS">
             <tls:context>
@@ -14,9 +15,10 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
     <configuration-properties doc:name="Configuration properties" doc:id="ffb8d47f-0a67-4e06-b81a-b48eaac40b0a" file="mule-properties.yaml" />
     <product-api:config name="Product_API_Config" doc:name="Product API Config" doc:id="1944d434-b568-46a6-8c76-e92b8f65fc6c" property_host="${product.dapi.url}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}" property_port="${product.dapi.port}" property_basePath="${product.dapi.basePath}" property_protocol="${product.dapi.protocol}" />
     <customer360api:config name="Customer_360_API_Config" doc:name="Customer 360 API Config" doc:id="3e7e559f-13e7-4211-b6dc-1a067010873c" property_host="${customer360.papi.url}" property_port="${customer360.papi.port}" property_basePath="${customer360.papi.basePath}" property_protocol="${customer360.papi.protocol}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}" />
+    <customer-apispec:config name="Customer_API_Spec_Config" doc:name="Customer API Spec Config" doc:id="35a71057-e42d-4ea7-8940-d37eba2411b0" property_host="${customerAPI.dapi.url}" property_port="${customerAPI.dapi.port}" property_basePath="${customerAPI.dapi.basePath}" property_protocol="${customerAPI.dapi.protocol}"  property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}"/>
     <order-fulfillment-api:config name="Order_Fulfillment_API_Config" doc:name="Order Fulfillment API Config" doc:id="3efe8278-13fa-49c9-bfb6-c2ada378378f" property_host="${orderfulfillment.papi.url}" property_port="${orderfulfillment.papi.port}" property_basePath="${orderfulfillment.papi.basePath}" property_protocol="${orderfulfillment.papi.protocol}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}" />
     <api-gateway:autodiscovery apiId="${autodiscovery.api.id}" doc:name="API Autodiscovery" doc:id="8a169a24-de61-469f-bc20-6d58e267b7a2" flowRef="mobile-customer-api-main" />
-    <flow name="mobile-customer-api-main">
+	<flow name="mobile-customer-api-main">
         <http:listener config-ref="mobile-customer-api-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
@@ -338,8 +340,8 @@ output application/json
     </flow>
     <flow name="post:\session:application\json:mobile-customer-api-config">
         <logger level="WARN" doc:name="Logger" doc:id="4943c5d2-603e-47c9-b26b-b7e5469c8724" message="#['Method not fully implemented yet']" />
-        <customer360api:get-customers doc:name="Get customers" doc:id="601f5619-bbb5-4d3d-96dc-c281859f4824" config-ref="Customer_360_API_Config" customer-name="#[payload.username]" />
-        <choice doc:name="Choice" doc:id="092b86b3-1c53-4e9d-b934-a17727cbaa98">
+        <customer-apispec:get-customers doc:name="Get customers" doc:id="3bf7f104-b86b-4cd9-9fac-0483dc1e2aa7" customer-name="#[payload.username]" config-ref="Customer_API_Spec_Config"/>
+		<choice doc:name="Choice" doc:id="092b86b3-1c53-4e9d-b934-a17727cbaa98">
             <when expression="#[sizeOf(payload.customers) &gt; 0]">
                 <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="e396d24c-3b24-457b-ac1b-ac0a9433cfaa" doc:name="Successful Login">
                     <ee:message>
@@ -348,7 +350,7 @@ output application/json
 var customer = payload.customers[0]
 ---
 {
-	id: customer.id,
+	id: customer.accountId,
 	username: customer.email[0].address,
 	email: customer.email[0].address,
 	firstname: (customer.name splitBy ' ')[0],
@@ -397,11 +399,11 @@ output application/json
 	phone: [{
 		phoneNumber: payload.mobile_number,
 		doNotCall: false,
-		"type": 'Personal',
+		"type": 'Work',
 		doNotText: false,
 		preferred: true
 	}],
-	name: payload.firstname ++ payload.lastname,
+	name: payload.firstname ++ " " ++ payload.lastname,
 	email: [{
 		address: payload.email,
 		doNotEmail: false,
@@ -410,21 +412,27 @@ output application/json
 	}]
 }]]]></ee:set-payload>
             </ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="originalRequest" ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+			</ee:variables>
         </ee:transform>
-        <customer360api:post-customers doc:name="Post customers" doc:id="abf7678a-9a86-4f70-8c24-bf16fc3cacaa" config-ref="Customer_360_API_Config" />
-        <ee:transform xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd  http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="ec50ddf9-5443-4a20-b2e9-81f8430fc4c3">
+        <customer-apispec:post-customers doc:name="Post customers" doc:id="c7044930-e4f0-4a77-8d50-e09543f8ccf7" config-ref="Customer_API_Spec_Config"/>
+		<ee:transform xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd  http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="ec50ddf9-5443-4a20-b2e9-81f8430fc4c3">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  id: "12",
-  username: "matias.suarez",
-  email: "matias.suarez@mulesoft.com",
-  firstname: "matias",
-  lastname: "suarez",
-  password: "123456",
-  mobile_number: "1256650432"
+	firstname: vars.originalRequest.firstname,
+	last_login: vars.originalRequest.last_login,
+	id: payload.messages[0].itemId,
+	mobile_number: vars.originalRequest.mobile_number,
+	email: vars.originalRequest.email,
+	username: vars.originalRequest.username,
+	lastname: vars.originalRequest.lastname
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
