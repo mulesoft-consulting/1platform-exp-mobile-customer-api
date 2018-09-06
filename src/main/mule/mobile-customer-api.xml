@@ -513,24 +513,32 @@ output application/json
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="de85d1bb-00d5-4f42-a7fb-e23bb46df547" doc:name="Create Order Request">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
-output application/java
+output application/json
 var orderPrice = lookup('calculate_price',(payload.items default []) map (item, indexOfItem) -> {
-		productId: item.product_id as String,
-		quantity: item.quantity as String	 	
+	productId: item.product_id as String,
+	quantity: item.quantity as String
 }) as Number
 ---
 [{
 	customerId: attributes.uriParams.userId,
-	status: "new",
+	status: "Draft",
 	price: orderPrice,
 	orderDateTime: now(),
-	orderItems: (payload.items default []) map (item, indexOfItem) -> {
+	orderItems: (payload.items as Array default []) map (item, indexOfItem) -> {
 		product: {
-			id: item.product_id as Number, 
+			id: item.product_id,
 			name: "mocked value"
 		},
 		quantity: {
-			ordered: item.quantity as String
+			ordered: item.quantity default 1
+		},
+		orderLine: indexOfItem,
+		location: {
+		},
+		pricing: {
+			totalAmount: item.product.unit_price default 0,
+			itemAmount: item.product.unit_price default 0,
+			discountPct: 0
 		}
 	},
 	trackingNumber: uuid()
@@ -556,10 +564,10 @@ output application/json
 ---
 {
 	items: payload.orderItems map (orderItem , indexOfOrderItem) -> {
-		product_id: orderItem.product.id as Number,
+		product_id: orderItem.product.id,
 		quantity: orderItem.quantity.ordered as Number,
 		product: {
-			id: orderItem.product.id as Number,
+			id: orderItem.product.id,
 			name: orderItem.product.name
 		}
 	},

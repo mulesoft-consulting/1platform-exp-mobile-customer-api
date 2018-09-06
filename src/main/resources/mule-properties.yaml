@@ -25,10 +25,10 @@ product:
     basePath: "/api"
 orderfulfillment:
   papi:
-    url: "mocksvc.mulesoft.com"
+    url: "nto-order-fulfillment-api.us-e2.cloudhub.io"
     port: "443"
     protocol: "HTTPS"
-    basePath: "/mocks/a3856aec-6fda-42f7-be9e-29e2eb305832/api/v1"
+    basePath: "/api"
 customerAPI:
   dapi:
     url: "nto-customer-api-v1.us-e2.cloudhub.io"
