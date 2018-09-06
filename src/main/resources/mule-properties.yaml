@@ -37,10 +37,10 @@ customerAPI:
     basePath: "/api"
 customer360:
   papi:
-    url: "mocksvc.mulesoft.com"
+    url: "nto-customer-360-api-v2.us-e2.cloudhub.io"
     port: "443"
     protocol: "HTTPS"
-    basePath: "/mocks/41b3f3d0-9c47-4fa8-8179-130909b82b7b/v1"
+    basePath: "/api"
 
 # AP Client App Credentials
 client:

@@ -56,12 +56,6 @@
             <classifier>mule-plugin</classifier>
         </dependency>
     	<dependency>
-            <groupId>b2cc42af-8763-43cf-a316-246ce7aefd04</groupId>
-            <artifactId>customer-360</artifactId>
-            <version>1.0.7</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-    	<dependency>
             <groupId>66234019-5a31-4239-ba28-4e6d70f0468a</groupId>
             <artifactId>order-fulfillment-api</artifactId>
             <version>1.0.6</version>
@@ -83,6 +77,12 @@
             <groupId>66234019-5a31-4239-ba28-4e6d70f0468a</groupId>
             <artifactId>customer-api</artifactId>
             <version>1.0.1</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>b2cc42af-8763-43cf-a316-246ce7aefd04</groupId>
+            <artifactId>customer-360</artifactId>
+            <version>2.0.1</version>
             <classifier>mule-plugin</classifier>
         </dependency>
     </dependencies>

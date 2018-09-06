@@ -138,57 +138,33 @@ output application/json
         </error-handler>
     </flow>
     <flow name="get:\orders\order\(order_id):mobile-customer-api-config">
-        <customer360api:get-order-by-id doc:name="Get order by id" doc:id="5f60dbbc-2519-4ca5-b1bc-a1c17f2e8df9" id="#[attributes.uriParams.order_id]" config-ref="Customer_360_API_Config" />
-        <set-variable value="#[[]]" doc:name="Set Variable" doc:id="9fde8233-f891-48ed-8404-d27f45a45481" variableName="items" />
-        <foreach doc:name="For Each" doc:id="9521d9f0-1a14-4e8d-b844-d5fee07044a7" collection="#[payload.orderItems]">
-            <product-api:get doc:name="Get" doc:id="7a97c37d-eb9c-454a-8f81-3679c8314f3a" target="currentProduct" config-ref="Product_API_Config" id="#[payload.product.id]" />
-            <ee:transform doc:name="Transform Message" doc:id="40910172-e733-4fef-a6f3-d4ed59216bd6">
-                <ee:message />
-                <ee:variables>
-                    <ee:set-variable variableName="items"><![CDATA[%dw 2.0
-output application/java
----
-vars.items ++
-[
-	{
-		product: {
-			full_description: vars.currentProduct.description,
-			name: vars.currentProduct.name,
-			id: vars.currentProduct.id,
-			pictures: vars.currentProduct.characteristics.images map ($.href),
-			unit_original_price: vars.currentProduct.pricing.listPrice
-		},
-		quantity: payload.quantity.ordered,
-		rel_product: null,
-		product_id: vars.currentProduct.id
-	}
-]]]></ee:set-variable>
-                </ee:variables>
-            </ee:transform>
-        </foreach>
+        <order-fulfillment-api:get-order-by-id doc:name="Get order by id" doc:id="b9e3283a-aa51-4c88-9035-901777991cc5" config-ref="Order_Fulfillment_API_Config" id="#[attributes.uriParams.order_id]"/>
         <ee:transform doc:name="Transform Message" doc:id="c8c5de7b-9a51-4544-9dc7-d40d71798535">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
+var price = ( payload.price as Number ) default 100
 ---
 {
 	cost: {
-		final_price: payload.totalAmount default 0,
-		price: payload.subTotal default 0,
-		tax: payload.taxAmount default 0
+		final_price: ((price * p('tax_value') as Number) + price ),
+		price: price,
+		tax: price * ( p('tax_value') as Number )
 	},
 	shipping: {
-		shipping_address_id: payload.deliveryAddress.addressId,
-		rel_address: (payload.deliveryAddress.addressLines as Array joinBy " ") as String default " "
-            ++ ', ' ++ payload.deliveryAddress.city default ""
-            ++ ', ' ++ payload.deliveryAddress.postalCode default ""
-			++ ', ' ++ payload.deliveryAddress.state default ""
-			++ ', ' ++ payload.deliveryAddress.countryCode default ""
+		shipping_address_id: payload.billingAddress.addressId default ""
 	},
 	creation_date: payload.orderDateTime default "",
 	order_id: payload.orderId,
 	tracking_code: payload.trackingNumber default "",
-	items: vars.items
+	items: payload.orderItems map ( orderItem , indexOfOrderItem ) -> {
+		product: {
+			name: orderItem.product.name,
+			id: orderItem.product.id
+		},
+		quantity: orderItem.quantity.ordered default 0,
+		product_id: orderItem.product.id default ""
+	}
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
@@ -234,73 +210,33 @@ payload.products map (
         </ee:transform>
     </flow>
     <flow name="get:\orders\search:mobile-customer-api-config">
-        <customer360api:get-orders doc:name="Get orders" doc:id="605041af-2f18-4218-8db3-726355617c12" customer-id="#[attributes.queryParams.user_id]" config-ref="Customer_360_API_Config" />
-        <set-variable value="#[[]]" doc:name="Set Variable" doc:id="1e76ccf3-c693-4684-8645-d6f5f15fca12" variableName="orders" />
-        <foreach doc:name="For Each Order" doc:id="b038bbc9-ddef-4381-8886-276aff2beb01" collection="#[payload.orders]">
-            <set-variable value="#[[]]" doc:name="Set Variable" doc:id="407b1ae6-a471-43bc-b36d-74dda1707a60" variableName="orderItems" />
-            <foreach doc:name="For Each Product" doc:id="63627020-babe-4bb6-a5cb-af9fc36eeb8e" collection="#[payload.orderItems]">
-                <product-api:get doc:name="Get" doc:id="49a40da7-7e2f-46a9-855c-625e18243374" config-ref="Product_API_Config" id="#[payload.product.id]" target="currentProduct" />
-                <ee:transform doc:name="Transform Message" doc:id="b75b2191-6153-41e5-8163-4d43665c84e8">
-                    <ee:message />
-                    <ee:variables>
-                        <ee:set-variable variableName="orderItems"><![CDATA[%dw 2.0
-output application/java
----
-vars.orderItems ++
-[
-	{
-		product: {
-			full_description: vars.currentProduct.description,
-			name: vars.currentProduct.name,
-			id: vars.currentProduct.id,
-			pictures: vars.currentProduct.characteristics.images map ($.href),
-			unit_original_price: vars.currentProduct.pricing.listPrice
-		},
-		quantity: payload.quantity.ordered,
-		product_id: vars.currentProduct.id
-	}
-]]]></ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </foreach>
-            <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="890cb8c8-4f53-4076-a1b2-26129e034e9f">
-                <ee:message />
-                <ee:variables>
-                    <ee:set-variable variableName="orders"><![CDATA[%dw 2.0
-output application/java
----
-vars.orders ++
-[
-	{
-		cost: {
-			final_price: payload.totalAmount default 0,
-			price: payload.subTotal default 0,
-			tax: payload.taxAmount default 0
-		},
-		shipping: {
-			shipping_address_id: payload.deliveryAddress.addressId default "",
-			rel_address: (payload.deliveryAddress.addressLines as Array joinBy " ") as String default " "
-	            ++ ', ' ++ payload.deliveryAddress.city default ""
-	            ++ ', ' ++ payload.deliveryAddress.postalCode default ""
-				++ ', ' ++ payload.deliveryAddress.state default ""
-				++ ', ' ++ payload.deliveryAddress.countryCode default ""
-		},
-		creation_date: payload.orderDateTime default "",
-		order_id: payload.orderId,
-		tracking_code: payload.trackingNumber default "",
-		items: vars.orderItems,
-		customerId: payload.customerId
-	}
-]]]></ee:set-variable>
-                </ee:variables>
-            </ee:transform>
-        </foreach>
+        <customer360api:get-customer360-by-id doc:name="Get customer 360 by id" doc:id="8c28fa1b-cc46-4b5a-a584-f89932dd9c44" id="#[attributes.queryParams.user_id]" config-ref="Customer_360_API_Config"/>
         <ee:transform doc:name="Transform Message" doc:id="e5bcfd95-6ab5-4bdd-97ba-a3cd80dd68c7">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-vars.orders]]></ee:set-payload>
+payload.orders map ( order , indexOfOrder ) -> {
+	cost: {
+		final_price: ((order.price as Number) * p('tax_value') as Number) + order.price as Number default 0,
+		price: (order.price  as Number) default 0,
+		tax: (order.price  as Number) * p('tax_value') as Number default 0
+	},
+	shipping: {
+		shipping_address_id: order.billingAddress.addressId default ""
+	},
+	creation_date: order.orderDateTime default "",
+	order_id: order.orderId,
+	tracking_code: order.trackingNumber default "",
+	items: order.orderItems map ( orderItem , indexOfOrderItem ) -> {
+		product: {
+			name: orderItem.product.name,
+			id: orderItem.product.id
+		},
+		quantity: orderItem.quantity.ordered default 0,
+		product_id: orderItem.product.id default ""
+	}
+}]]></ee:set-payload>
             </ee:message>
         </ee:transform>
     </flow>
@@ -319,8 +255,8 @@ output application/json
         <set-variable value="#[500]" doc:name="Set Variable" doc:id="96f3cfa8-cc4c-46b9-940e-078a9b5aa575" variableName="httpStatus" />
     </flow>
     <flow name="get:\user\(userId):mobile-customer-api-config">
-        <customer360api:get-customer-by-id doc:name="Get customer by id" doc:id="158de95b-485a-4310-b348-e5976d96eec0" config-ref="Customer_360_API_Config" id="#[attributes.uriParams.userId]" />
-        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="510bf9a2-7074-4637-99f6-fbf3d4959558">
+        <customer360api:get-customer360-by-id doc:name="Get customer 360 by id" doc:id="666ac9ef-a9d7-4bc5-9619-38f41da3c559" id="#[attributes.uriParams.userId]" config-ref="Customer_360_API_Config"/>
+		<ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="510bf9a2-7074-4637-99f6-fbf3d4959558">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
