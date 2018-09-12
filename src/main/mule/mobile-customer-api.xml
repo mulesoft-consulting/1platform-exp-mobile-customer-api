@@ -458,7 +458,7 @@ var orderPrice = lookup('calculate_price',(payload.items default []) map (item, 
 [{
 	customerId: attributes.uriParams.userId,
 	status: "Draft",
-	price: orderPrice,
+	totalAmount: orderPrice,
 	orderDateTime: now(),
 	orderItems: (payload.items as Array default []) map (item, indexOfItem) -> {
 		product: {
