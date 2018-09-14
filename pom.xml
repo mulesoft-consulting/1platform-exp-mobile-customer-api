@@ -31,46 +31,10 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-            <groupId>org.mule.modules</groupId>
-            <artifactId>mule-apikit-module</artifactId>
-            <version>1.1.6</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-    	<dependency>
-            <groupId>4ff02cd7-9e08-481b-890b-15ff7467b894</groupId>
-            <artifactId>product-api-spec</artifactId>
-            <version>1.0.8</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-    	<dependency>
-            <groupId>org.mule.connectors</groupId>
-            <artifactId>mule-sockets-connector</artifactId>
-            <version>1.1.0</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-    	<dependency>
-            <groupId>org.mule.connectors</groupId>
-            <artifactId>mule-http-connector</artifactId>
-            <version>1.1.0</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
     	<dependency>
             <groupId>66234019-5a31-4239-ba28-4e6d70f0468a</groupId>
             <artifactId>order-fulfillment-api</artifactId>
             <version>1.0.6</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-    	<dependency>
-            <groupId>org.mule.connectors</groupId>
-            <artifactId>mule-objectstore-connector</artifactId>
-            <version>1.1.1</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-    	<dependency>
-            <groupId>org.mule.modules</groupId>
-            <artifactId>mule-validation-module</artifactId>
-            <version>1.2.2</version>
             <classifier>mule-plugin</classifier>
         </dependency>
     	<dependency>
