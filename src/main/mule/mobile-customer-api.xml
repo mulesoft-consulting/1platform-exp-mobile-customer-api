@@ -4,20 +4,6 @@
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
 http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
 http://www.mulesoft.org/schema/mule/customer-apispec http://www.mulesoft.org/schema/mule/customer-apispec/current/mule-customer-apispec.xsd">
-    <http:listener-config name="mobile-customer-api-httpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="8082" protocol="HTTPS">
-            <tls:context>
-                <tls:key-store type="jks" path="keystore.jks" keyPassword="${keystore.password}" password="${keystore.password}" />
-            </tls:context>
-        </http:listener-connection>
-    </http:listener-config>
-    <apikit:config name="mobile-customer-api-config" raml="mobile-customer-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-    <configuration-properties doc:name="Configuration properties" doc:id="ffb8d47f-0a67-4e06-b81a-b48eaac40b0a" file="mule-properties.yaml" />
-    <product-api:config name="Product_API_Config" doc:name="Product API Config" doc:id="1944d434-b568-46a6-8c76-e92b8f65fc6c" property_host="${product.dapi.url}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}" property_port="${product.dapi.port}" property_basePath="${product.dapi.basePath}" property_protocol="${product.dapi.protocol}" />
-    <customer360api:config name="Customer_360_API_Config" doc:name="Customer 360 API Config" doc:id="3e7e559f-13e7-4211-b6dc-1a067010873c" property_host="${customer360.papi.url}" property_port="${customer360.papi.port}" property_basePath="${customer360.papi.basePath}" property_protocol="${customer360.papi.protocol}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}" />
-    <customer-apispec:config name="Customer_API_Spec_Config" doc:name="Customer API Spec Config" doc:id="35a71057-e42d-4ea7-8940-d37eba2411b0" property_host="${customerAPI.dapi.url}" property_port="${customerAPI.dapi.port}" property_basePath="${customerAPI.dapi.basePath}" property_protocol="${customerAPI.dapi.protocol}"  property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}"/>
-    <order-fulfillment-api:config name="Order_Fulfillment_API_Config" doc:name="Order Fulfillment API Config" doc:id="3efe8278-13fa-49c9-bfb6-c2ada378378f" property_host="${orderfulfillment.papi.url}" property_port="${orderfulfillment.papi.port}" property_basePath="${orderfulfillment.papi.basePath}" property_protocol="${orderfulfillment.papi.protocol}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}" />
-    <api-gateway:autodiscovery apiId="${autodiscovery.api.id}" doc:name="API Autodiscovery" doc:id="8a169a24-de61-469f-bc20-6d58e267b7a2" flowRef="mobile-customer-api-main" />
 	<flow name="mobile-customer-api-main">
         <http:listener config-ref="mobile-customer-api-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -409,7 +395,7 @@ attributes.uriParams.userId]]></ee:set-variable>
         <logger message='Object Store result: + #[payload]' level="INFO" doc:name="Log ObjectStore Update result"/>
         
     </flow>
-    <flow name="get:\user\(userId)\shopping_cart:mobile-customer-api-config">
+	<flow name="get:\user\(userId)\shopping_cart:mobile-customer-api-config">
 		<os:contains key="#[attributes.uriParams.userId]" doc:name="Check Shopping Cart existence" target="userHasCart"/>
         <validation:is-true doc:name="Is true" doc:id="e9f81c61-f6c9-4c7b-9c2f-6c6d8a92220d" expression="#[vars.userHasCart == true]"/>
 		<logger message='"Cart Exists"' level="INFO" doc:name="Cart" />

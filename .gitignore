@@ -25,6 +25,7 @@ local.properties
 .loadpath
 .project
 .classpath
+*.yaml
 
 # External tool builders
 .externalToolBuilders/

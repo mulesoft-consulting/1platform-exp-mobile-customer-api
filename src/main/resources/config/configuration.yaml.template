@@ -1,0 +1,52 @@
+https:
+  port: "8082"
+      
+keystore:
+  path: 
+  password: 
+
+product:
+  dapi:
+    url: 
+    port: 
+    protocol: 
+    basePath:
+orderfulfillment:
+  papi:
+    url: 
+    port:
+    protocol: 
+    basePath:
+customerAPI:
+  dapi:
+    url: 
+    port: 
+    protocol:
+    basePath: 
+customer360:
+  papi:
+    url: 
+    port:
+    protocol: 
+    basePath: 
+
+autodiscovery:
+  api:
+    id: 
+
+client:
+  app:
+    client_id: 
+    client_secret: 
+
+anypoint:
+  platform:
+    analytics_base_uri: 
+    client_id: 
+    client_secret: 
+    base_uri: 
+    visualizer:
+      layer: 
+
+# Business Properties
+tax_value: "0.1"
