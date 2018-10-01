@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.mycompany</groupId>
+	<groupId>com.mulesoft.1platform</groupId>
 	<artifactId>mobile-customer-api</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>mule-application</packaging>
 
 	<name>mobile-customer-api</name>
@@ -41,6 +41,7 @@
 					       <anypoint.platform.coreservice_base_uri>https://anypoint.mulesoft.com/accounts</anypoint.platform.coreservice_base_uri>
 					       <anypoint.platform.platform_base_uri>https://anypoint.mulesoft.com/apiplatform</anypoint.platform.platform_base_uri>
 					       <anypoint.platform.contracts_base_uri>https://anypoint.mulesoft.com/apigateway/ccs</anypoint.platform.contracts_base_uri>
+					       <anypoint.platform.visualizer.layer>Experience</anypoint.platform.visualizer.layer>
 					       <anypoint.platform.client_id>${env.ANYPOINT_CLIENT_ID}</anypoint.platform.client_id>
 					       <anypoint.platform.client_secret>${env.ANYPOINT_CLIENT_SECRET}</anypoint.platform.client_secret>
 	 				    </properties>
@@ -53,7 +54,10 @@
 						<goals>
 							<goal>deploy</goal>
 						</goals>
-					</execution>
+					<configuration>
+                            <classifier>mule-application</classifier>
+                        </configuration>
+                    </execution>
 				</executions>
 			</plugin>
 		</plugins>
