@@ -29,6 +29,12 @@ customer360:
     port:
     protocol: 
     basePath: 
+customerEnrollment:
+  papi:
+    url: 
+    port: 
+    protocol: 
+    basePath: 
 
 autodiscovery:
   api:
