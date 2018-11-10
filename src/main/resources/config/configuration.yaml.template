@@ -36,14 +36,10 @@ customerEnrollment:
     protocol: 
     basePath: 
 
-autodiscovery:
-  api:
-    id: 
-
-client:
-  app:
-    client_id: 
-    client_secret: 
+app:
+  client_id: 
+  client_secret: 
+  autodiscovery:
 
 anypoint:
   platform:
