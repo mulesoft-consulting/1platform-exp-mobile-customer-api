@@ -34,7 +34,7 @@
 						<environment>${cloudhub.environment}</environment>
 						<applicationName>${cloudhub.app}</applicationName>
 						<businessGroup>${cloudhub.bg}</businessGroup>
-						<workerType>Micro</workerType>
+						<workerType>${cloudhub.worker}</workerType>
 	 					<properties>
 						   <!--  API MANAGER -->
 					       <anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com</anypoint.platform.analytics_base_uri>
