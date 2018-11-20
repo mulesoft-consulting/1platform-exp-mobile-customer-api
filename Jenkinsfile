@@ -74,7 +74,9 @@ pipeline {
   }
 
   post {
-    step([$class: 'hudson.plugins.chucknorris.CordellWalkerRecorder'])
+    always {
+      step([$class: 'hudson.plugins.chucknorris.CordellWalkerRecorder'])
+    }
   }
 
   tools {
