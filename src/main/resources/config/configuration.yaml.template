@@ -1,5 +1,5 @@
 https:
-  port: "8082"
+  port:
       
 keystore:
   path: 
@@ -40,15 +40,6 @@ app:
   client_id: 
   client_secret: 
   autodiscovery:
-
-anypoint:
-  platform:
-    analytics_base_uri: 
-    client_id: 
-    client_secret: 
-    base_uri: 
-    visualizer:
-      layer: 
 
 # Business Properties
 tax_value: "0.1"
