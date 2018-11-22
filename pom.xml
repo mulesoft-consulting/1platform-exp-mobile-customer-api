@@ -81,7 +81,7 @@
 								<environment>${cloudhub.environment}</environment>
 								<applicationName>${cloudhub.app}</applicationName>
 								<businessGroup>${cloudhub.bg}</businessGroup>
-								<provider>${cloudhub.provider}</provider>
+								<target>${cloudhub.target}</target>
 								<properties>
 									<!-- API MANAGER -->
 									<anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com</anypoint.platform.analytics_base_uri>
