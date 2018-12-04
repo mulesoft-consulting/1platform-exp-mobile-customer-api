@@ -1,31 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:customer-apispec="http://www.mulesoft.org/schema/mule/customer-apispec"
-	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:customer360api="http://www.mulesoft.org/schema/mule/customer360api" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:order-apispec="http://www.mulesoft.org/schema/mule/order-apispec" xmlns:order-fulfillment-api="http://www.mulesoft.org/schema/mule/order-fulfillment-api" xmlns:product-api="http://www.mulesoft.org/schema/mule/product-api" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/order-apispec http://www.mulesoft.org/schema/mule/order-apispec/current/mule-order-apispec.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/product-api http://www.mulesoft.org/schema/mule/product-api/current/mule-product-api.xsd http://www.mulesoft.org/schema/mule/customer360api http://www.mulesoft.org/schema/mule/customer360api/current/mule-customer360api.xsd http://www.mulesoft.org/schema/mule/order-fulfillment-api http://www.mulesoft.org/schema/mule/order-fulfillment-api/current/mule-order-fulfillment-api.xsd http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+<mule xmlns:customer-enrollment-api="http://www.mulesoft.org/schema/mule/customer-enrollment-api"
+	xmlns:customer-apispec="http://www.mulesoft.org/schema/mule/customer-apispec" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:customer360api="http://www.mulesoft.org/schema/mule/customer360api" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:order-apispec="http://www.mulesoft.org/schema/mule/order-apispec" xmlns:order-fulfillment-api="http://www.mulesoft.org/schema/mule/order-fulfillment-api" xmlns:product-api="http://www.mulesoft.org/schema/mule/product-api" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/order-apispec http://www.mulesoft.org/schema/mule/order-apispec/current/mule-order-apispec.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/product-api http://www.mulesoft.org/schema/mule/product-api/current/mule-product-api.xsd http://www.mulesoft.org/schema/mule/customer360api http://www.mulesoft.org/schema/mule/customer360api/current/mule-customer360api.xsd http://www.mulesoft.org/schema/mule/order-fulfillment-api http://www.mulesoft.org/schema/mule/order-fulfillment-api/current/mule-order-fulfillment-api.xsd http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
 http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
-http://www.mulesoft.org/schema/mule/customer-apispec http://www.mulesoft.org/schema/mule/customer-apispec/current/mule-customer-apispec.xsd">
-    <http:listener-config name="mobile-customer-api-httpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="8082" protocol="HTTPS">
-            <tls:context>
-                <tls:key-store type="jks" path="keystore.jks" keyPassword="${keystore.password}" password="${keystore.password}" />
-            </tls:context>
-        </http:listener-connection>
-    </http:listener-config>
-    <apikit:config name="mobile-customer-api-config" raml="mobile-customer-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-    <configuration-properties doc:name="Configuration properties" doc:id="ffb8d47f-0a67-4e06-b81a-b48eaac40b0a" file="mule-properties.yaml" />
-    <product-api:config name="Product_API_Config" doc:name="Product API Config" doc:id="1944d434-b568-46a6-8c76-e92b8f65fc6c" property_host="${product.dapi.url}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}" property_port="${product.dapi.port}" property_basePath="${product.dapi.basePath}" property_protocol="${product.dapi.protocol}" />
-    <customer360api:config name="Customer_360_API_Config" doc:name="Customer 360 API Config" doc:id="3e7e559f-13e7-4211-b6dc-1a067010873c" property_host="${customer360.papi.url}" property_port="${customer360.papi.port}" property_basePath="${customer360.papi.basePath}" property_protocol="${customer360.papi.protocol}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}" />
-    <customer-apispec:config name="Customer_API_Spec_Config" doc:name="Customer API Spec Config" doc:id="35a71057-e42d-4ea7-8940-d37eba2411b0" property_host="${customerAPI.dapi.url}" property_port="${customerAPI.dapi.port}" property_basePath="${customerAPI.dapi.basePath}" property_protocol="${customerAPI.dapi.protocol}"  property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}"/>
-    <order-fulfillment-api:config name="Order_Fulfillment_API_Config" doc:name="Order Fulfillment API Config" doc:id="3efe8278-13fa-49c9-bfb6-c2ada378378f" property_host="${orderfulfillment.papi.url}" property_port="${orderfulfillment.papi.port}" property_basePath="${orderfulfillment.papi.basePath}" property_protocol="${orderfulfillment.papi.protocol}" property_client-id="${client.app.client_id}" property_client-secret="${client.app.client_secret}" />
-    <api-gateway:autodiscovery apiId="${autodiscovery.api.id}" doc:name="API Autodiscovery" doc:id="8a169a24-de61-469f-bc20-6d58e267b7a2" flowRef="mobile-customer-api-main" />
+http://www.mulesoft.org/schema/mule/customer-apispec http://www.mulesoft.org/schema/mule/customer-apispec/current/mule-customer-apispec.xsd
+http://www.mulesoft.org/schema/mule/customer-enrollment-api http://www.mulesoft.org/schema/mule/customer-enrollment-api/current/mule-customer-enrollment-api.xsd">
 	<flow name="mobile-customer-api-main">
-        <http:listener config-ref="mobile-customer-api-httpListenerConfig" path="/api/*">
+        <http:listener config-ref="RTF_Listener_config" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:response>
             <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
         <apikit:router config-ref="mobile-customer-api-config" />
@@ -111,13 +98,13 @@ output application/json
         </error-handler>
     </flow>
     <flow name="mobile-customer-api-console">
-        <http:listener config-ref="mobile-customer-api-httpListenerConfig" path="/console/*">
+        <http:listener config-ref="RTF_Listener_config" path="/console/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:response>
             <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
         <apikit:console config-ref="mobile-customer-api-config" />
@@ -170,19 +157,19 @@ var price = ( payload.price as Number ) default 100
         </ee:transform>
     </flow>
     <flow name="get:\products\product\(product_id):mobile-customer-api-config">
-        <product-api:get doc:name="Get" doc:id="9ea7e802-8db0-4035-92af-9db1532a96c8" config-ref="Product_API_Config" target="currentProduct" id="#[attributes.uriParams.product_id]" />
+        <product-api:get doc:name="Get" doc:id="9ea7e802-8db0-4035-92af-9db1532a96c8" config-ref="Product_API_Config" id="#[attributes.uriParams.product_id]" />
         <ee:transform doc:name="Transform Message" doc:id="caea28ec-10aa-4060-9df3-6e2c73864fd8">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
-	id: vars.currentProduct.id,
-	name: vars.currentProduct.name,
-	full_description: vars.currentProduct.description,
-	pictures: vars.currentProduct.characteristics.images map ($.href),
-	unit_original_price: vars.currentProduct.pricing.costOfGoodsSold default 0,
-	unit_price: vars.currentProduct.pricing.listPrice,
+	id: payload.id,
+	name: payload.name,
+	full_description: payload.description,
+	pictures: payload.characteristics.images map ($.href),
+	unit_original_price: payload.pricing.costOfGoodsSold default 0,
+	unit_price: payload.pricing.listPrice,
 	available_stock: 10
 }]]></ee:set-payload>
             </ee:message>
@@ -195,7 +182,7 @@ output application/json
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-payload.products map (
+payload.products filter ($.id != '000b201') map (
 	{
 		id: $.id,
 		name: $.name,
@@ -326,9 +313,8 @@ output application/java
         </choice>
     </flow>
     <flow name="post:\user:application\json:mobile-customer-api-config">
-        <ee:transform doc:name="Transform Message" doc:id="421ff579-c16b-42c9-af42-32ef2640c27d">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
+        <customer-enrollment-api:post-enrollments doc:name="Post enrollments" doc:id="262db689-605a-4d2d-94d1-4a254cb85f60" config-ref="Customer_Enrollment_API_Config">
+			<customer-enrollment-api:post-enrollments-request-data ><![CDATA[#[%dw 2.0
 output application/json
 ---
 [{
@@ -346,16 +332,8 @@ output application/json
 		"type": 'Personal',
 		preferred: true
 	}]
-}]]]></ee:set-payload>
-            </ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="originalRequest" ><![CDATA[%dw 2.0
-output application/java
----
-payload]]></ee:set-variable>
-			</ee:variables>
-        </ee:transform>
-        <customer-apispec:post-customers doc:name="Post customers" doc:id="c7044930-e4f0-4a77-8d50-e09543f8ccf7" config-ref="Customer_API_Spec_Config"/>
+}]]]]></customer-enrollment-api:post-enrollments-request-data>
+		</customer-enrollment-api:post-enrollments>
 		<ee:transform xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd  http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="ec50ddf9-5443-4a20-b2e9-81f8430fc4c3">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -374,9 +352,8 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="put:\user\(userId)\shopping_cart:application\json:mobile-customer-api-config">
-		<ee:transform doc:name="Transform Message" doc:id="14d27cda-e777-4ad0-9675-9831330cccbf" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<os:store key="#[attributes.uriParams.userId]" doc:name="Update User Shopping Cart" doc:id="b5baac83-1c24-4061-86c6-5b1879e93a9b">
+			<os:value ><![CDATA[#[%dw 2.0
 output application/java
 var orderPrice = lookup('calculate_price',((payload.items default []) map (item, index) -> {
 		productId: item.product_id as String,
@@ -394,22 +371,12 @@ var orderPrice = lookup('calculate_price',((payload.items default []) map (item,
 		product_id: item.product_id,
 		quantity: item.quantity
 	}
-}]]></ee:set-payload>
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="user_id" ><![CDATA[%dw 2.0
-output application/java
----
-attributes.uriParams.userId]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="42cfd42b-628a-4661-a90e-1f5f13c885c7" message="#[payload]"/>
-		<os:store key="#[vars.user_id]" doc:name="Update User Shopping Cart">
+}]]]></os:value>
 		</os:store>
-        <logger message='Object Store result: + #[payload]' level="INFO" doc:name="Log ObjectStore Update result"/>
+        <logger message='#[output application/json --- payload]' level="INFO" doc:name="Log ObjectStore Update result"/>
         
     </flow>
-    <flow name="get:\user\(userId)\shopping_cart:mobile-customer-api-config">
+	<flow name="get:\user\(userId)\shopping_cart:mobile-customer-api-config">
 		<os:contains key="#[attributes.uriParams.userId]" doc:name="Check Shopping Cart existence" target="userHasCart"/>
         <validation:is-true doc:name="Is true" doc:id="e9f81c61-f6c9-4c7b-9c2f-6c6d8a92220d" expression="#[vars.userHasCart == true]"/>
 		<logger message='"Cart Exists"' level="INFO" doc:name="Cart" />

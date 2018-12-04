@@ -25,6 +25,9 @@ local.properties
 .loadpath
 .project
 .classpath
+*.yaml
+*.jks
+integration-tests/.idea
 
 # External tool builders
 .externalToolBuilders/

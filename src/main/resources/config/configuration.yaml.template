@@ -1,0 +1,45 @@
+mule:
+  listener:
+      
+keystore:
+  path: 
+  password: 
+
+product:
+  dapi:
+    url: 
+    port: 
+    protocol: 
+    basePath:
+orderfulfillment:
+  papi:
+    url: 
+    port:
+    protocol: 
+    basePath:
+customerAPI:
+  dapi:
+    url: 
+    port: 
+    protocol:
+    basePath: 
+customer360:
+  papi:
+    url: 
+    port:
+    protocol: 
+    basePath: 
+customerEnrollment:
+  papi:
+    url: 
+    port: 
+    protocol: 
+    basePath: 
+
+app:
+  client_id: 
+  client_secret: 
+  autodiscovery:
+
+# Business Properties
+tax_value: "0.1"
