@@ -1,5 +1,5 @@
 suite:
-  name: "Hello World Suite"
+  name: "Mobile Customer API Suite"
 files:
   - file: tests/CreateOrder.dwl
 reporters:
