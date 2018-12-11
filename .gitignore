@@ -27,6 +27,7 @@ local.properties
 .classpath
 *.yaml
 *.jks
+!bat.yaml
 integration-tests/.idea
 
 # External tool builders
