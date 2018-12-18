@@ -11,8 +11,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<app.runtime>4.1.3</app.runtime>
-		<mule.maven.plugin.version>3.2.2</mule.maven.plugin.version>
+		<app.runtime>4.1.4</app.runtime>
+		<mule.maven.plugin.version>3.2.3</mule.maven.plugin.version>
 	</properties>
 	<build>
         <plugins>
@@ -22,7 +22,7 @@
                 <version>${mule.maven.plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <classifier>mule-application</classifier>
+                    <classifier>rest.api</classifier>
                 </configuration>
             </plugin>
         </plugins>
@@ -39,7 +39,7 @@
 					<plugin>
 						<groupId>org.mule.tools.maven</groupId>
 						<artifactId>mule-maven-plugin</artifactId>
-						<version>${mule.maven.plugin.version}</version>
+						<version>3.1.7</version>
 						<configuration>
 							<cloudHubDeployment>
 								<uri>https://anypoint.mulesoft.com</uri>
@@ -76,7 +76,7 @@
 					<plugin>
 						<groupId>org.mule.tools.maven</groupId>
 						<artifactId>mule-maven-plugin</artifactId>
-						<version>${mule.maven.plugin.version}</version>
+						<version>3.2.3</version>
 						<configuration>
 							<runtimeFabricDeployment>
 								<uri>https://anypoint.mulesoft.com</uri>
@@ -104,18 +104,10 @@
 								<deploymentSettings>
 									<cpuReserved>${cloudhub.cpu}</cpuReserved>
 									<memoryReserved>${cloudhub.memory}</memoryReserved>
+									<publicUrl>${cloudhub.publicUrl}</publicUrl>
 								</deploymentSettings>
 							</runtimeFabricDeployment>
 						</configuration>
-						<!-- <executions>
-							<execution>
-								<id>deploy</id>
-								<phase>deploy</phase>
-								<goals>
-									<goal>deploy</goal>
-								</goals>
-							</execution>
-						</executions> -->
 					</plugin>
 				</plugins>
 			</build>
@@ -209,6 +201,14 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+<distributionManagement>
+    <repository>
+      <id>1platform</id>
+      <name>1platform Repository</name>
+      <url>https://maven.anypoint.mulesoft.com/api/v1/organizations/66234019-5a31-4239-ba28-4e6d70f0468a/maven</url>
+      <layout>default</layout>
+    </repository>
+  </distributionManagement>
 
 <name>dev-nto-mobile-customer-api-v1</name>
 </project>
