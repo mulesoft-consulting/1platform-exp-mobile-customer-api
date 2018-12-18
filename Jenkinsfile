@@ -50,7 +50,7 @@ pipeline {
         ENVIRONMENT = 'Development'
         ANYPOINT_ENV = credentials('DEV_ANYPOINT_SALES')
         APP_NAME = 'dev-nto-mobile-customer-api-v1'
-        PUBLIC_URL = "$APP_NAME.rtf.demos.mulesoft.com"
+        PUBLIC_URL = "https://dev-nto-mobile-customer-api-v1.rtf.demos.mulesoft.com"
       }
       steps {
         withMaven(
@@ -68,7 +68,7 @@ pipeline {
           ENVIRONMENT = 'Production'
           ANYPOINT_ENV = credentials('PRD_ANYPOINT_SALES')
           APP_NAME = 'nto-mobile-customer-api-v1'
-          PUBLIC_URL = "$APP_NAME.rtf.demos.mulesoft.com"
+          PUBLIC_URL = "https://nto-mobile-customer-api-v1.rtf.demos.mulesoft.com"
         }
         steps {
           withMaven(
