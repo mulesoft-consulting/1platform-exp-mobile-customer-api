@@ -4,7 +4,7 @@ files:
   - file: tests/CreateOrder.dwl
 reporters:
     - type: HTML
-      outFile: /tmp/HTML.html
+      outFile: /tmp/index.html
     #- type: Custom
     #  options:
     #      URL: http://localhost:18000/post
