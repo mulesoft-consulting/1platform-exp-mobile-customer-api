@@ -37,7 +37,7 @@ pipeline {
       steps {
         withMaven(
           mavenSettingsConfig: 'f007350a-b1d5-44a8-9757-07c22cd2a360'){
-            sh "mvn -B -P $PROFILE test"
+            sh "mvn -B test"
         }
       }
     }
