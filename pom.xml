@@ -41,6 +41,7 @@
 						<artifactId>mule-maven-plugin</artifactId>
 						<version>3.1.7</version>
 						<configuration>
+                                                        <classifier>mulesoft-application</classifier>
 							<cloudHubDeployment>
 								<uri>https://anypoint.mulesoft.com</uri>
 								<muleVersion>${mule.version}</muleVersion>
@@ -78,6 +79,7 @@
 						<artifactId>mule-maven-plugin</artifactId>
 						<version>3.2.3</version>
 						<configuration>
+                                                       <classifier>rest.api</classifier>
 							<runtimeFabricDeployment>
 								<uri>https://anypoint.mulesoft.com</uri>
 								<muleVersion>${mule.version}</muleVersion>
