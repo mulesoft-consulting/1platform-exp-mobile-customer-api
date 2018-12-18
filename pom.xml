@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>66234019-5a31-4239-ba28-4e6d70f0468a</groupId>
 	<artifactId>mobile-customer-api</artifactId>
-	<version>1.0.16-SNAPSHOT</version>
+	<version>1.0.16</version>
 	<packaging>mule-application</packaging>
 
 	<properties>
