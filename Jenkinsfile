@@ -55,7 +55,7 @@ pipeline {
       steps {
         withMaven(
           mavenSettingsConfig: 'f007350a-b1d5-44a8-9757-07c22cd2a360'){
-            //#sh 'mvn -e -B -P $PROFILE deploy -DattachMuleSources=true'
+            sh 'mvn -e -B -P $PROFILE deploy -DattachMuleSources=true'
             sh 'mvn -V -B -P $PROFILE -DskipTests deploy -DmuleDeploy -Dmule.version=$MULE_VERSION -Danypoint.username=$DEPLOY_CREDS_USR -Danypoint.password=$DEPLOY_CREDS_PSW -Dcloudhub.app=$APP_NAME -Dcloudhub.environment=$ENVIRONMENT -Denv.ANYPOINT_CLIENT_ID=$ANYPOINT_ENV_USR -Denv.ANYPOINT_CLIENT_SECRET=$ANYPOINT_ENV_PSW -Dcloudhub.bg=$BG -Dcloudhub.cpu=$CPU -Dcloudhub.memory=$MEM -Dapp.client_id=$APP_CLIENT_CREDS_USR -Dapp.client_secret=$APP_CLIENT_CREDS_PSW -Dcloudhub.target=$TARGET -Dcloudhub.publicUrl=$PUBLIC_URL'
           }
       }
