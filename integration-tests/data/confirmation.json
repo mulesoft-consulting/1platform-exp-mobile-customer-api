@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "product_id": "1004100-1",
+      "quantity": 1
+    }
+  ],
+  "payment": {
+    "credit_card_id": "1231",
+    "rel_card": "http://alc.mulesoft.com/api/users/user/vip_user_8/credit_card/1122"
+  },
+  "shipping": {
+    "shipping_address_id": "1122",
+    "rel_address": "http://alc.mulesoft.com/api/users/user/vip_user_8/address/1122"
+  }
+}

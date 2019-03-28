@@ -41,6 +41,7 @@
 						<artifactId>mule-maven-plugin</artifactId>
 						<version>${mule.maven.plugin.version}</version>
 						<configuration>
+                                                        <classifier>mulesoft-application</classifier>
 							<cloudHubDeployment>
 								<uri>https://anypoint.mulesoft.com</uri>
 								<muleVersion>${mule.version}</muleVersion>
@@ -78,6 +79,7 @@
 						<artifactId>mule-maven-plugin</artifactId>
 						<version>${mule.maven.plugin.version}</version>
 						<configuration>
+                                                       <classifier>mule-application</classifier>
 							<runtimeFabricDeployment>
 								<uri>https://anypoint.mulesoft.com</uri>
 								<muleVersion>${mule.version}</muleVersion>
@@ -104,7 +106,7 @@
 								<deploymentSettings>
 									<cpuReserved>${cloudhub.cpu}</cpuReserved>
 									<memoryReserved>${cloudhub.memory}</memoryReserved>
-									<publicUrl>https://nto-mobile-customer-api.rtf.demos.mulesoft.com</publicUrl>
+									<publicUrl>${cloudhub.publicUrl}</publicUrl>
 								</deploymentSettings>
 							</runtimeFabricDeployment>
 						</configuration>
@@ -210,14 +212,13 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-
 	<distributionManagement>
-    <repository>
-      <id>anypoint-exchange</id>
-      <name>Corporate Repository</name>
-      <url>https://maven.anypoint.mulesoft.com/api/v1/organizations/66234019-5a31-4239-ba28-4e6d70f0468a/maven</url>
-      <layout>default</layout>
-    </repository>
-  </distributionManagement>
+    		<repository>
+      			<id>1platform</id>
+      			<name>1platform Repository</name>
+      			<url>https://maven.anypoint.mulesoft.com/api/v1/organizations/66234019-5a31-4239-ba28-4e6d70f0468a/maven</url>
+      			<layout>default</layout>
+    		</repository>
+  	</distributionManagement>
 
 </project>

@@ -157,19 +157,19 @@ var price = ( payload.price as Number ) default 100
         </ee:transform>
     </flow>
     <flow name="get:\products\product\(product_id):mobile-customer-api-config">
-        <product-api:get doc:name="Get" doc:id="9ea7e802-8db0-4035-92af-9db1532a96c8" config-ref="Product_API_Config" target="currentProduct" id="#[attributes.uriParams.product_id]" />
+        <product-api:get doc:name="Get" doc:id="9ea7e802-8db0-4035-92af-9db1532a96c8" config-ref="Product_API_Config" id="#[attributes.uriParams.product_id]" />
         <ee:transform doc:name="Transform Message" doc:id="caea28ec-10aa-4060-9df3-6e2c73864fd8">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
-	id: vars.currentProduct.id,
-	name: vars.currentProduct.name,
-	full_description: vars.currentProduct.description,
-	pictures: vars.currentProduct.characteristics.images map ($.href),
-	unit_original_price: vars.currentProduct.pricing.costOfGoodsSold default 0,
-	unit_price: vars.currentProduct.pricing.listPrice,
+	id: payload.id,
+	name: payload.name,
+	full_description: payload.description,
+	pictures: payload.characteristics.images map ($.href),
+	unit_original_price: payload.pricing.costOfGoodsSold default 0,
+	unit_price: payload.pricing.listPrice,
 	available_stock: 10
 }]]></ee:set-payload>
             </ee:message>
@@ -182,7 +182,7 @@ output application/json
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-payload.products map (
+payload.products filter ($.id != '000b201') map (
 	{
 		id: $.id,
 		name: $.name,
@@ -313,9 +313,8 @@ output application/java
         </choice>
     </flow>
     <flow name="post:\user:application\json:mobile-customer-api-config">
-        <ee:transform doc:name="Transform Message" doc:id="421ff579-c16b-42c9-af42-32ef2640c27d">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
+        <customer-enrollment-api:post-enrollments doc:name="Post enrollments" doc:id="262db689-605a-4d2d-94d1-4a254cb85f60" config-ref="Customer_Enrollment_API_Config">
+			<customer-enrollment-api:post-enrollments-request-data ><![CDATA[#[%dw 2.0
 output application/json
 ---
 [{
@@ -333,6 +332,7 @@ output application/json
 		"type": 'Personal',
 		preferred: true
 	}]
+<<<<<<< HEAD
 }]]]></ee:set-payload>
             </ee:message>
 			<ee:variables >
@@ -343,6 +343,10 @@ payload]]></ee:set-variable>
 			</ee:variables>
         </ee:transform>
         <customer-enrollment-api:post-enrollments doc:name="Post enrollments" doc:id="262db689-605a-4d2d-94d1-4a254cb85f60" config-ref="Customer_Enrollment_API_Config"/>
+=======
+}]]]]></customer-enrollment-api:post-enrollments-request-data>
+		</customer-enrollment-api:post-enrollments>
+>>>>>>> 42c48eec854f1ec62f1f52751453b1f9a47d9278
 		<ee:transform xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd  http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="ec50ddf9-5443-4a20-b2e9-81f8430fc4c3">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -361,9 +365,8 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="put:\user\(userId)\shopping_cart:application\json:mobile-customer-api-config">
-		<ee:transform doc:name="Transform Message" doc:id="14d27cda-e777-4ad0-9675-9831330cccbf" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<os:store key="#[attributes.uriParams.userId]" doc:name="Update User Shopping Cart" doc:id="b5baac83-1c24-4061-86c6-5b1879e93a9b">
+			<os:value ><![CDATA[#[%dw 2.0
 output application/java
 var orderPrice = lookup('calculate_price',((payload.items default []) map (item, index) -> {
 		productId: item.product_id as String,
@@ -381,19 +384,9 @@ var orderPrice = lookup('calculate_price',((payload.items default []) map (item,
 		product_id: item.product_id,
 		quantity: item.quantity
 	}
-}]]></ee:set-payload>
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="user_id" ><![CDATA[%dw 2.0
-output application/java
----
-attributes.uriParams.userId]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="42cfd42b-628a-4661-a90e-1f5f13c885c7" message="#[payload]"/>
-		<os:store key="#[vars.user_id]" doc:name="Update User Shopping Cart">
+}]]]></os:value>
 		</os:store>
-        <logger message='Object Store result: + #[payload]' level="INFO" doc:name="Log ObjectStore Update result"/>
+        <logger message='#[output application/json --- payload]' level="INFO" doc:name="Log ObjectStore Update result"/>
         
     </flow>
 	<flow name="get:\user\(userId)\shopping_cart:mobile-customer-api-config">
