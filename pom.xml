@@ -3,16 +3,16 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>66234019-5a31-4239-ba28-4e6d70f0468a</groupId>
-	<artifactId>mobile-customer-api</artifactId>
-	<version>1.0.15</version>
+	<artifactId>nto-mobile-customer-api</artifactId>
+	<version>1.0.16</version>
 	<packaging>mule-application</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<app.runtime>4.1.3</app.runtime>
-		<mule.maven.plugin.version>3.2.2</mule.maven.plugin.version>
+		<app.runtime>4.1.4</app.runtime>
+		<mule.maven.plugin.version>3.2.7</mule.maven.plugin.version>
 	</properties>
 	<build>
         <plugins>
@@ -22,7 +22,7 @@
                 <version>${mule.maven.plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <classifier>mule-application</classifier>
+                    <classifier>mule-application-example</classifier>
                 </configuration>
             </plugin>
         </plugins>
@@ -104,6 +104,7 @@
 								<deploymentSettings>
 									<cpuReserved>${cloudhub.cpu}</cpuReserved>
 									<memoryReserved>${cloudhub.memory}</memoryReserved>
+									<publicUrl>https://nto-mobile-customer-api.rtf.demos.mulesoft.com</publicUrl>
 								</deploymentSettings>
 							</runtimeFabricDeployment>
 						</configuration>
@@ -210,5 +211,13 @@
 		</pluginRepository>
 	</pluginRepositories>
 
-<name>dev-nto-mobile-customer-api-v1</name>
+	<distributionManagement>
+    <repository>
+      <id>anypoint-exchange</id>
+      <name>Corporate Repository</name>
+      <url>https://maven.anypoint.mulesoft.com/api/v1/organizations/66234019-5a31-4239-ba28-4e6d70f0468a/maven</url>
+      <layout>default</layout>
+    </repository>
+  </distributionManagement>
+
 </project>
