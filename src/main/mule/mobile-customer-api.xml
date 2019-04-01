@@ -313,7 +313,8 @@ output application/java
         </choice>
     </flow>
     <flow name="post:\user:application\json:mobile-customer-api-config">
-        <customer-enrollment-api:post-enrollments doc:name="Post enrollments" doc:id="262db689-605a-4d2d-94d1-4a254cb85f60" config-ref="Customer_Enrollment_API_Config">
+        <set-variable value="payload" doc:name="Set Variable" doc:id="da7cb772-0963-45a2-85c3-d5035418a83c" variableName="originalRequest"/>
+		<customer-enrollment-api:post-enrollments doc:name="Post enrollments" doc:id="262db689-605a-4d2d-94d1-4a254cb85f60" config-ref="Customer_Enrollment_API_Config">
 			<customer-enrollment-api:post-enrollments-request-data ><![CDATA[#[%dw 2.0
 output application/json
 ---
@@ -332,21 +333,8 @@ output application/json
 		"type": 'Personal',
 		preferred: true
 	}]
-<<<<<<< HEAD
-}]]]></ee:set-payload>
-            </ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="originalRequest" ><![CDATA[%dw 2.0
-output application/java
----
-payload]]></ee:set-variable>
-			</ee:variables>
-        </ee:transform>
-        <customer-enrollment-api:post-enrollments doc:name="Post enrollments" doc:id="262db689-605a-4d2d-94d1-4a254cb85f60" config-ref="Customer_Enrollment_API_Config"/>
-=======
 }]]]]></customer-enrollment-api:post-enrollments-request-data>
 		</customer-enrollment-api:post-enrollments>
->>>>>>> 42c48eec854f1ec62f1f52751453b1f9a47d9278
 		<ee:transform xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd  http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="ec50ddf9-5443-4a20-b2e9-81f8430fc4c3">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
