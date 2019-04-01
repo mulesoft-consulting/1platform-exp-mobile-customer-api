@@ -6,11 +6,7 @@ pipeline {
     DEPLOY_CREDS = credentials('deploy-anypoint-user')
     MULE_VERSION = '4.1.4'
     BG = "1Platform\\Retail\\Sales"
-    CPU = "500m"
-    MEM = "1000Mi"
     APP_CLIENT_CREDS = credentials("$BRANCH_NAME-api-mgr-exp-mobile-customer-api")
-    PROFILE="RTF"
-    TARGET="1platform-rtf-sales"
   }
   stages {
     stage('Prepare') {
@@ -25,6 +21,9 @@ pipeline {
       }
     }
     stage('Build') {
+      environment {
+        PROFILE = 'Cloudhub'
+      }
       steps {
         withMaven(
           mavenSettingsConfig: 'f007350a-b1d5-44a8-9757-07c22cd2a360'){
