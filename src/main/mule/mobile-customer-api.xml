@@ -313,7 +313,7 @@ output application/java
         </choice>
     </flow>
     <flow name="post:\user:application\json:mobile-customer-api-config">
-        <set-variable value="payload" doc:name="Set Variable" doc:id="da7cb772-0963-45a2-85c3-d5035418a83c" variableName="originalRequest"/>
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="e0c9178c-6d95-44bd-8c90-aa615e2a35c3" variableName="originalPayload"/>
 		<customer-enrollment-api:post-enrollments doc:name="Post enrollments" doc:id="262db689-605a-4d2d-94d1-4a254cb85f60" config-ref="Customer_Enrollment_API_Config">
 			<customer-enrollment-api:post-enrollments-request-data ><![CDATA[#[%dw 2.0
 output application/json
@@ -335,21 +335,37 @@ output application/json
 	}]
 }]]]]></customer-enrollment-api:post-enrollments-request-data>
 		</customer-enrollment-api:post-enrollments>
-		<ee:transform xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd  http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="ec50ddf9-5443-4a20-b2e9-81f8430fc4c3">
+		<logger level="INFO" doc:name="Logger" doc:id="3c6ce63f-7ea0-480f-90c1-f205a9121d97" message="#[payload]"/>
+		<ee:transform xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd  http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="ec50ddf9-5443-4a20-b2e9-81f8430fc4c3" doc:name="Set Response">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
+if (payload.meta.messages[0].code == '201')
 {
-	firstname: vars.originalRequest.firstname,
-	last_login: vars.originalRequest.last_login,
-	id: payload.messages[0].itemId,
-	mobile_number: vars.originalRequest.mobile_number,
-	email: vars.originalRequest.email,
-	username: vars.originalRequest.username,
-	lastname: vars.originalRequest.lastname
+	firstname: vars.originalPayload.firstname,
+	last_login: vars.originalPayload.last_login,
+	id: payload.meta.messages[0].itemId,
+	mobile_number: vars.originalPayload.mobile_number,
+	email: vars.originalPayload.email,
+	username: vars.originalPayload.username,
+	lastname: vars.originalPayload.lastname
+}
+else if (payload.meta.messages[0].code == '409')
+{
+	message: "user with email " ++ vars.originalPayload.email ++ ' already exists.'
+}
+else
+{
+	message: 'unknow error.'
 }]]></ee:set-payload>
             </ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.meta.messages[0].code as Number]]></ee:set-variable>
+			</ee:variables>
         </ee:transform>
     </flow>
     <flow name="put:\user\(userId)\shopping_cart:application\json:mobile-customer-api-config">
