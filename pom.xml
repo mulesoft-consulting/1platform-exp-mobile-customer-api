@@ -4,7 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>66234019-5a31-4239-ba28-4e6d70f0468a</groupId>
 	<artifactId>nto-mobile-customer-api</artifactId>
+<<<<<<< HEAD
 	<version>1.0.18</version>
+=======
+	<version>1.0.19</version>
+>>>>>>> develop
 	<packaging>mule-application</packaging>
 
 	<properties>
