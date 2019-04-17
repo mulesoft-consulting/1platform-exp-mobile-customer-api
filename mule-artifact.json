@@ -1,1 +1,1 @@
-{"minMuleVersion":"4.1.2","secureProperties":["app.client_id", "app.client_secret"]}
+{"minMuleVersion":"4.1.2","secureProperties":["app.client_id", "app.client_secret", "anypoint.platform.client_id","anypoint.platform.client_secret"]}

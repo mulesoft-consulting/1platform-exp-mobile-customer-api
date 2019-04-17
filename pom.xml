@@ -3,16 +3,16 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>66234019-5a31-4239-ba28-4e6d70f0468a</groupId>
-	<artifactId>mobile-customer-api</artifactId>
-	<version>1.0.15</version>
+	<artifactId>nto-mobile-customer-api</artifactId>
+	<version>1.0.18</version>
 	<packaging>mule-application</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<app.runtime>4.1.3</app.runtime>
-		<mule.maven.plugin.version>3.2.2</mule.maven.plugin.version>
+		<app.runtime>4.1.4</app.runtime>
+		<mule.maven.plugin.version>3.2.7</mule.maven.plugin.version>
 	</properties>
 	<build>
         <plugins>
@@ -41,6 +41,7 @@
 						<artifactId>mule-maven-plugin</artifactId>
 						<version>${mule.maven.plugin.version}</version>
 						<configuration>
+                                                        <classifier>mulesoft-application</classifier>
 							<cloudHubDeployment>
 								<uri>https://anypoint.mulesoft.com</uri>
 								<muleVersion>${mule.version}</muleVersion>
@@ -52,13 +53,12 @@
 								<workerType>${cloudhub.worker}</workerType>
 								<properties>
 									<!-- API MANAGER -->
-									<anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com</anypoint.platform.analytics_base_uri>
-									<anypoint.platform.coreservice_base_uri>https://anypoint.mulesoft.com/accounts</anypoint.platform.coreservice_base_uri>
-									<anypoint.platform.platform_base_uri>https://anypoint.mulesoft.com/apiplatform</anypoint.platform.platform_base_uri>
-									<anypoint.platform.contracts_base_uri>https://anypoint.mulesoft.com/apigateway/ccs</anypoint.platform.contracts_base_uri>
-									<anypoint.platform.visualizer.layer>Experience</anypoint.platform.visualizer.layer>
+									<anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com/</anypoint.platform.analytics_base_uri>
+									<anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
 									<anypoint.platform.client_id>${env.ANYPOINT_CLIENT_ID}</anypoint.platform.client_id>
 									<anypoint.platform.client_secret>${env.ANYPOINT_CLIENT_SECRET}</anypoint.platform.client_secret>
+									<anypoint.platform.visualizer.layer>Experience</anypoint.platform.visualizer.layer>
+									<anypoint.platform.config.analytics.agent.enabled>true</anypoint.platform.config.analytics.agent.enabled>
 									<app.client_id>${app.client_id}</app.client_id>
 									<app.client_secret>${app.client_secret}</app.client_secret>
 									<mule.listener>Cloudhub_Listener_config</mule.listener>
@@ -78,6 +78,7 @@
 						<artifactId>mule-maven-plugin</artifactId>
 						<version>${mule.maven.plugin.version}</version>
 						<configuration>
+                                                       <classifier>mule-application</classifier>
 							<runtimeFabricDeployment>
 								<uri>https://anypoint.mulesoft.com</uri>
 								<muleVersion>${mule.version}</muleVersion>
@@ -90,13 +91,12 @@
 								<provider>MC</provider>
 								<properties>
 									<!-- API MANAGER -->
-									<anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com</anypoint.platform.analytics_base_uri>
-									<anypoint.platform.coreservice_base_uri>https://anypoint.mulesoft.com/accounts</anypoint.platform.coreservice_base_uri>
-									<anypoint.platform.platform_base_uri>https://anypoint.mulesoft.com/apiplatform</anypoint.platform.platform_base_uri>
-									<anypoint.platform.contracts_base_uri>https://anypoint.mulesoft.com/apigateway/ccs</anypoint.platform.contracts_base_uri>
-									<anypoint.platform.visualizer.layer>Experience</anypoint.platform.visualizer.layer>
+									<anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com/</anypoint.platform.analytics_base_uri>
+									<anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
 									<anypoint.platform.client_id>${env.ANYPOINT_CLIENT_ID}</anypoint.platform.client_id>
 									<anypoint.platform.client_secret>${env.ANYPOINT_CLIENT_SECRET}</anypoint.platform.client_secret>
+									<anypoint.platform.visualizer.layer>Experience</anypoint.platform.visualizer.layer>
+									<anypoint.platform.config.analytics.agent.enabled>true</anypoint.platform.config.analytics.agent.enabled>
 									<mule.listener>RTF_Listener_config</mule.listener>
 									<app.client_id>${app.client_id}</app.client_id>
 									<app.client_secret>${app.client_secret}</app.client_secret>
@@ -104,18 +104,12 @@
 								<deploymentSettings>
 									<cpuReserved>${cloudhub.cpu}</cpuReserved>
 									<memoryReserved>${cloudhub.memory}</memoryReserved>
+									<cpuMax>${cloudhub.cpu}</cpuMax>
+									<memoryMax>${cloudhub.memory}</memoryMax>
+									<publicUrl>${cloudhub.publicUrl}</publicUrl>
 								</deploymentSettings>
 							</runtimeFabricDeployment>
 						</configuration>
-						<!-- <executions>
-							<execution>
-								<id>deploy</id>
-								<phase>deploy</phase>
-								<goals>
-									<goal>deploy</goal>
-								</goals>
-							</execution>
-						</executions> -->
 					</plugin>
 				</plugins>
 			</build>
@@ -209,6 +203,14 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+	<distributionManagement>
+    		<repository>
+      			<id>1platform</id>
+      			<name>1platform Repository</name>
+      			<url>https://maven.anypoint.mulesoft.com/api/v1/organizations/66234019-5a31-4239-ba28-4e6d70f0468a/maven</url>
+      			<layout>default</layout>
+    		</repository>
+  	</distributionManagement>
 
-<name>dev-nto-mobile-customer-api-v1</name>
+<name>nto-mobile-customer-api</name>
 </project>

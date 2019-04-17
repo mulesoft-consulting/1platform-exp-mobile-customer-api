@@ -18,4 +18,11 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
     <order-fulfillment-api:config name="Order_Fulfillment_API_Config" doc:name="Order Fulfillment API Config" doc:id="b2d13713-63c0-4011-a5e4-77c4cadd9806" property_host="${orderfulfillment.papi.url}" property_port="${orderfulfillment.papi.port}" property_basePath="${orderfulfillment.papi.basePath}" property_protocol="${orderfulfillment.papi.protocol}" property_client-id="${app.client_id}" property_client-secret="${app.client_secret}" />
     <api-gateway:autodiscovery apiId="${app.autodiscovery}" doc:name="API Autodiscovery" doc:id="1f2d60a9-666d-4cff-aa1e-2348603052d9" flowRef="mobile-customer-api-main" />
 	<customer-enrollment-api:config name="Customer_Enrollment_API_Config" doc:name="Customer Enrollment API Config" doc:id="35b973e6-349b-4c8f-acc8-6917452dd8c8" property_host="${customerEnrollment.papi.url}" property_port="${customerEnrollment.papi.port}" property_basePath="${customerEnrollment.papi.basePath}" property_protocol="${customerEnrollment.papi.protocol}" property_client-id="${app.client_id}" property_client-secret="${app.client_secret}"/>
+	<http:listener-config name="Cloudhub_Listener_config" doc:name="HTTP Listener config" doc:id="283ef96d-8be7-4485-9db7-104c18aa1862" >
+		<http:listener-connection protocol="HTTPS" host="0.0.0.0" port="8082" >
+			<tls:context >
+				<tls:key-store type="jks" path="${keystore.path}" keyPassword="${keystore.password}" password="${keystore.password}" />
+			</tls:context>
+		</http:listener-connection>
+	</http:listener-config>
 </mule>
