@@ -502,6 +502,23 @@ output application/json
 			</when>
 			<otherwise>
 				<logger level="ERROR" doc:name="Logger" doc:id="b0023c6d-956c-47ad-a8ce-c052868cac4a" message="#['Error creating order for user_id ' ++ (vars.user_id default 'NONE')]"/>
+				<ee:transform doc:name="Create Error Response" doc:id="6ca0fd62-37b6-4df7-8154-52c6503c2f68" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: payload.meta.messages[0].description default "UNKNOWN ERROR"
+}]]></ee:set-payload>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.meta.messages[0].code as Number default 500]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
 			</otherwise>
 		</choice>
         <async doc:name="Async">
