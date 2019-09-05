@@ -474,9 +474,11 @@ attributes.uriParams.userId]]></ee:set-variable>
         
         <order-fulfillment-api:post-orders doc:name="Post orders" doc:id="edf56cd4-671e-4a71-87d2-cc76fd048d9d" config-ref="Order_Fulfillment_API_Config"/>
 		<!-- <order-api:get-order-by-id id="#[payload.order_id]" client-id="${app.client_id}"   client-secret="${app.client_secret}" config-ref="Order_API_Config" doc:name="Get Order Detail" />         -->
-        
-        <order-fulfillment-api:get-order-by-id doc:name="Get order by id" doc:id="2270f62f-2591-4a2e-9350-a8979b22d35b" config-ref="Order_Fulfillment_API_Config" id="#[payload.messages[0].itemId]"/>
-		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="
+		<logger level="INFO" doc:name="Logger" doc:id="955f9621-2481-4ac1-abc1-e2f0dc1f6f07" message="#[output application/json ---payload]"/>
+		<choice doc:name="Choice" doc:id="5b2235b5-976e-40de-a648-b190fdb1c827" >
+			<when expression="#[payload.meta.messages[0].itemId != null]">
+				<order-fulfillment-api:get-order-by-id doc:name="Get order by id" doc:id="2270f62f-2591-4a2e-9350-a8979b22d35b" config-ref="Order_Fulfillment_API_Config" id="#[payload.messages[0].itemId]" />
+				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="66b08e5e-636f-4bc7-a235-8e736c2eb3a5" doc:name="Create Order Response">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -497,6 +499,28 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+			</when>
+			<otherwise>
+				<logger level="ERROR" doc:name="Logger" doc:id="b0023c6d-956c-47ad-a8ce-c052868cac4a" message="#['Error creating order for user_id ' ++ (vars.user_id default 'NONE')]"/>
+				<ee:transform doc:name="Create Error Response" doc:id="6ca0fd62-37b6-4df7-8154-52c6503c2f68" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: payload.meta.messages[0].description default "UNKNOWN ERROR"
+}]]></ee:set-payload>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.meta.messages[0].code as Number default 500]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</otherwise>
+		</choice>
         <async doc:name="Async">
         		<os:remove key="#[vars.user_id]" doc:name="Remove"/>
       	</async>
